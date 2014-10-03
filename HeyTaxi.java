@@ -2,6 +2,11 @@ package heyTaxi;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import heyTaxi.Tarifs;
@@ -13,30 +18,8 @@ public class HeyTaxi {
 	static Saisies saisies = new Saisies();
 	static Calculer calcul = new Calculer();
 	static List<Tarifs> tarifs = new ArrayList<Tarifs>();
-	
-	/*
-	static double[][] array_tarifs = {
-			{ 21, 2, 0.86, 1.72, 21.93, 1.29, 2.58, 21.93 },
-			{ 25, 2.1, 0.83, 1.66, 22.5, 1.2, 2.4, 22.5 },
-			{ 39, 2.1, 0.83, 1.66, 22.5, 1.23, 2.46, 25 },
-			{ 44, 2.2, 0.79, 1.58, 24.19, 1.19, 2.37, 24.19 },
-			{ 72, 2.15, 0.79, 1.58, 22.86, 1.19, 2.38, 22.86 },
-			{ 73, 2.4, 0.84, 1.68, 25.4, 1.26, 2.52, 25.4 },
-			{ 74, 3.15, 0.92, 1.84, 17.3, 1.38, 2.76, 17.3 },
-			{ 75, 2.5, 1, 1.24, 0.0, 1.5, 1.5, 0.0 },
-			{ 85, 2.3, 0.8, 1.6, 22.2, 1.2, 2.4, 22.2 },
-			{ 90, 2.2, 0.83, 1.66, 21, 1.15, 2.3, 21 } };
-	*/
-	
 
-	public static void Saisie() {
-		saisies.SaisiesDept();
-		saisies.SaisiesTypeTrajet();
-		saisies.SaisiesDimanche();
-		saisies.SaisiesNuit();
-		saisies.SaisiesDuree();
-		saisies.SaisiesKm();
-	}
+
 	
 	public static int Finder(){
 		int indice = -1;
@@ -61,33 +44,45 @@ public class HeyTaxi {
 		 */
 		
 		try{
-    		//Ouverture d'un flux d'entrée à partir du fichier "docTarif.txt"
-        	BufferedReader monBuffer = new BufferedReader(new FileReader("/home/etudiant/ThomasDabre/java/TP/src/heyTaxi/tarif.txt"));
-        	String line = null;					//Variable qui contiendra chaque ligne du fichier
-        	
-        	//Tant qu'il reste une ligne au fichier
-        	while ((line = monBuffer.readLine()) != null)
-        	{
-        		//On découpe la ligne gràce au caractère ","
-        		String[] part = line.split(",");
-        		
-        		//On ajoute un objet de la classe Tarif à la brochure, à partir de la ligne du fichier découpée
-        		tarifs.add(new Tarifs(Integer.parseInt(part[0]),Double.parseDouble(part[1]),Double.parseDouble(part[2]),Double.parseDouble(part[3]),
-        							Double.parseDouble(part[4]),Double.parseDouble(part[5]),Double.parseDouble(part[6]),Double.parseDouble(part[7])));
-        		
-        	}
-        	//Fermeture du buffer
-        	monBuffer.close();
-		} catch (Exception e) {
-		    System.out.println("Impossible de trouver le fichier");
-		  }
+			Class.forName("org.postgresql.Driver");
+		}
+		catch (Exception e){
+			System.out.println("Impossible de charger le driver");
+		}
+		
+		try{
+			String url = "jdbc:postgresql://172.16.99.2:5432/tdabre";
+			Connection maConnexion = DriverManager.getConnection(url, "Anonymous", "CeciNestPasMOnMotDePasse");
+			
+			try{
+				Statement maRequete = maConnexion.createStatement();
 				
-				Saisie();
-		
-	
-			System.out.print("Prix a payer : ");
-			System.out.printf("%.2f", calcul.CalculTarifs(Finder()));
-			System.out.println(" €");
-		
+				try{
+					String texteRequete = "select * from \"HeyTaxi\".tarif";
+					ResultSet curseurResultat = maRequete.executeQuery(texteRequete);
+					ResultSetMetaData detailsDonnees = curseurResultat.getMetaData();
+					
+					while(curseurResultat.next())
+	    			{
+						
+	    			}
+	    			
+					System.out.print("Prix a payer : ");
+					System.out.printf("%.2f", calcul.CalculTarifs(Finder()));
+					System.out.println(" €");
+				}
+				catch(Exception e){
+					System.out.println("Impossible d'executer la requete");
+				}
+				
+			}
+			catch (Exception e){
+				System.out.println("Impossible de stocker le texte des requetes");
+			}
+		}
+		catch (Exception e){
+			System.out.println("Impossible d'établir une connexion");
+		}
+		saisies.Saisies();
 	}
 }

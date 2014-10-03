@@ -8,32 +8,23 @@ public class Saisies {
 	
 	Scanner reader = new Scanner(System.in);
 	
-	public void SaisiesDept(){
+	
+	public void Saisies(){
 		System.out.println("Saisissez le département :");
 		dept = reader.nextInt();
-	}
-	
-	public void SaisiesDuree(){
+		
 		System.out.println("Durée du trajet ? (en minute(s))");
 		duree = reader.nextInt();
-	}
-	
-	public void SaisiesKm(){
+		
 		System.out.println("Nombre de kilomètres parcourus ?");
 		km = reader.nextInt();
-	}
 	
-	public void SaisiesDimanche(){
 		System.out.println("Le trajet était-il un dimanche ? (o/n)");
 		dimanche = reader.next().toLowerCase().charAt(0);
-	}
 	
-	public void SaisiesNuit(){
 		System.out.println("Est-ce un trajet de nuit ? (o/n)");
 		nuit = reader.next().toLowerCase().charAt(0);
-	}
 	
-	public void SaisiesTypeTrajet(){
 		System.out.println("Aller simple ou aller/retour ? (S/R)");
 		typeTrajet = reader.next().toLowerCase().charAt(0);
 	}
