@@ -15,10 +15,9 @@ import heyTaxi.Calculer;
 
 public class HeyTaxi {
 
-	static Saisies saisies = new Saisies();
-	static Calculer calcul = new Calculer();
-	static List<Tarifs> tarifs = new ArrayList<Tarifs>();
-
+	public static Saisies saisies = new Saisies();
+	public static Calculer calcul = new Calculer();
+	public static List<Tarifs> tarifs = new ArrayList<Tarifs>();
 
 	
 	public static int Finder(){
@@ -36,13 +35,6 @@ public class HeyTaxi {
 		
 		double resultat;
 		
-		
-		/*
-		for(int i=0; i < array_tarifs.length; i++){
-			tarifs.add(new Tarifs((int)(array_tarifs[i][0]), array_tarifs[i][1], array_tarifs[i][2], array_tarifs[i][3], array_tarifs[i][4], array_tarifs[i][5], array_tarifs[i][6], array_tarifs[i][7]));
-		}
-		 */
-		
 		try{
 			Class.forName("org.postgresql.Driver");
 		}
@@ -52,7 +44,7 @@ public class HeyTaxi {
 		
 		try{
 			String url = "jdbc:postgresql://172.16.99.2:5432/tdabre";
-			Connection maConnexion = DriverManager.getConnection(url, "Anonymous", "CeciNestPasMOnMotDePasse");
+			Connection maConnexion = DriverManager.getConnection(url, "t.dabre", "pass123");
 			
 			try{
 				Statement maRequete = maConnexion.createStatement();
@@ -62,11 +54,14 @@ public class HeyTaxi {
 					ResultSet curseurResultat = maRequete.executeQuery(texteRequete);
 					ResultSetMetaData detailsDonnees = curseurResultat.getMetaData();
 					
-					while(curseurResultat.next())
-	    			{
+					while(curseurResultat.next()){
 						
+						tarifs.add(new Tarifs(curseurResultat.getInt("departement"),curseurResultat.getDouble("prisEnCharge"),curseurResultat.getDouble("tarifKmArSemaine"),curseurResultat.getDouble("tarifKmAsSemaine"),
+								curseurResultat.getDouble("tarifHoraireJourSemaine"),curseurResultat.getDouble("tarifKmArNuitDimanche"),curseurResultat.getDouble("tarifKmAsNuitDimanche"),curseurResultat.getDouble("tarifHoraireNuitDimanche")));
 	    			}
-	    			
+					curseurResultat.close();
+					maConnexion.close();
+					
 					System.out.print("Prix a payer : ");
 					System.out.printf("%.2f", calcul.CalculTarifs(Finder()));
 					System.out.println(" €");
@@ -83,6 +78,5 @@ public class HeyTaxi {
 		catch (Exception e){
 			System.out.println("Impossible d'établir une connexion");
 		}
-		saisies.Saisies();
 	}
 }

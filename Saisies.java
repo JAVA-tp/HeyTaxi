@@ -29,12 +29,17 @@ public class Saisies {
 		typeTrajet = reader.next().toLowerCase().charAt(0);
 	}
 	
+	
 	/**
 	 * Accesseur du numéro de département
 	 * @return Le numéro du département [entier]
 	 */
 	public int getDept() {
 		return dept;
+	}
+	
+	public void setDept(int departement) {
+		this.dept = departement;
 	}
 	
 	/**
@@ -45,12 +50,20 @@ public class Saisies {
 		return duree;
 	}
 	
+	public void setDuree(int duree) {
+		this.duree = duree;
+	}
+	
 	/**
 	 * Accesseur du nombre de km
 	 * @return km [int]
 	 */
 	public int getKm(){
 		return km;
+	}
+	
+	public void setKm(int km) {
+		this.km = km;
 	}
 	
 	/**
@@ -61,6 +74,10 @@ public class Saisies {
 		return dimanche;
 	}
 	
+	public void setDimanche(char dimanche) {
+		this.dimanche = dimanche;
+	}
+	
 	/**
 	 * Accesseur de l'heure
 	 * @return nuit [char]
@@ -69,11 +86,19 @@ public class Saisies {
 		return nuit;
 	}
 	
+	public void setNuit(char nuit) {
+		this.nuit = nuit;
+	}
+	
 	/**
 	 * Accesseur du type de trajet
 	 * @return typeTrajet [char]
 	 */
 	public char getTypeTrajet(){
 		return typeTrajet;
+	}
+	
+	public void setTypeTrajet(char typeTrajet) {
+		this.typeTrajet = typeTrajet;
 	}
 }
